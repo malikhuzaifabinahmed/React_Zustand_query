@@ -7,42 +7,11 @@ import { Route } from 'react-router-dom';
 import { About } from '../pages/About';
 import { Contact } from '../pages/Contact';
 import { ProtectedRoute } from '../layouts/ProtectedRoutes';
-import { GlobalErrorElement } from '../lib/GlobalErrorElement';
-import { GlobalLayout } from '../lib/GlobalLayout';
+import { GlobalErrorElement } from '../components/GlobalErrorElement.jsx';
+import { GlobalLayout } from '../components/GlobalLayout.jsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { NotProtectedRoutes } from '../layouts/NotProtectedRoutes.jsx';
-import { TOKEN_COOKIE_CONFIG } from '../config.js';
-import { api } from '../lib/axios.js';
 
-
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const refreshToken = Cookies.get('refreshToken');
-        const { access_token, refresh_token } = await authService.refreshToken(refreshToken);
-
-        // Update cookies
-        Cookies.set('accessToken', access_token, TOKEN_COOKIE_CONFIG);
-        Cookies.set('refreshToken', refresh_token, TOKEN_COOKIE_CONFIG);
-
-        // Retry original request with new token
-        originalRequest.headers.Authorization = `Bearer ${access_token}`;
-        return api(originalRequest);
-      } catch (err) {
-        // If refresh fails, logout user
-        authService.logout();
-        return Promise.reject(error);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
 
 
 export const router = createBrowserRouter(

@@ -1,27 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/useAuthStore";
 import { authService } from '../services/authService';
-import { ErrorBoundary } from 'react-error-boundary';
-import { GlobalErrorElement } from '../lib/GlobalErrorElement';
 import { useState } from "react";
+import { useUser } from "../hooks/querys/useUser";
 export default function Navbar() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const { user, isAuthenticated, logout, accessToken } = useAuthStore();
+    const { data } = useUser();
 
 
     const handleLogout = async () => {
         try {
             setIsLoading(true);
-            if (accessToken) {
-                await authService.logout(accessToken);
-            }
-            logout();
+            await authService.logout();
             navigate('/login');
         } catch (error) {
             console.error('Logout failed:', error);
             // Force logout on error
-            logout();
+            authService.logout();
             navigate('/login');
         } finally {
             setIsLoading(false);
@@ -33,11 +28,11 @@ export default function Navbar() {
                 My App
             </Link>
             <div className="flex gap-4 items-center">
-                {isAuthenticated && (
+                {data && (
                     <>
                         <div className="relative group">
                             <span className="cursor-pointer">
-                                Welcome, {user?.name || 'User'}
+                                Welcome, {data?.name || 'User'}
                             </span>
                             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden group-hover:block">
 

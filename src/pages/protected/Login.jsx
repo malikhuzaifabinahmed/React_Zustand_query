@@ -3,11 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { authService } from '../../services/authService';
-import { useAuthStore } from '../../store/useAuthStore';
 
 export function Login() {
   const navigate = useNavigate();
-  const setAuth = useAuthStore((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -39,11 +37,7 @@ export function Login() {
         if (!access_token || !refresh_token) {
           throw new Error('Invalid authentication response');
         }
-        setAuth({
-          accessToken: access_token,
-          refreshToken: refresh_token,
-          isAuthenticated: true
-        });
+
         navigate('/');
       } catch (err) {
         setError(err.message);

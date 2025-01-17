@@ -1,16 +1,10 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '../../store/useAuthStore';
-import { authService } from '../../services/authService';
+import { useUser } from '../../hooks/querys/useUser';
 
 export function Home() {
-  const { accessToken } = useAuthStore();
 
-  const { data: profile, isLoading, error } = useQuery({
-    queryKey: ['profile'],
-    queryFn: () => authService.getProfile(accessToken),
-    enabled: !!accessToken,
-  });
+  const { data: profile, isLoading, error } = useUser()
+
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

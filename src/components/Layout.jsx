@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/useAuthStore';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 import Navbar from './Navbar';
 
 export function Layout() {
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
 
 
 
