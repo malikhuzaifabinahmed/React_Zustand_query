@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
+import { API_URL } from "../config";
 
 export const api = axios.create({
-  baseURL: 'https://api.escuelajs.co/api/v1', // Replace with your API URL
+  baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
-
