@@ -1,8 +1,8 @@
-import { api } from '../lib/axios';
+import api from "../lib/axios";
 
 export const userService = {
   getCurrentUser: async () => {
-    const { data } = await api.get('/users/me');
+    const { data } = await api.get("/users/me");
     return data;
   },
 
@@ -16,4 +16,3 @@ export const userService = {
   //   return data;
   // },
 };
-

@@ -1,56 +1,58 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { authService } from '../../services/authService';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { toast } from "sonner";
+import { useLogin } from "@/hooks/mutations/auth";
 
 export function Login() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+
+  const loginMutation = useLogin({
+    onSuccess: ({ access_token, refresh_token }) => {
+      if (!access_token || !refresh_token) {
+        throw new Error("Invalid authentication response");
+      }
+      toast.success("Login successful!");
+      navigate("/");
+    },
+    onError: (error) => {
+      if (error.response.status === 401) {
+        toast.error("Invalid email or password. Please try again.");
+        return;
+      }
+
+      toast.error(error.message || "Login failed. Please try again.");
+    },
+  });
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email('Invalid email address')
-      .required('Email is required'),
+      .email("Invalid email address")
+      .required("Email is required"),
     password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     validationSchema,
-    onSubmit: async (values) => {
-      setIsLoading(true);
-      setError('');
-
-      try {
-        const { access_token, refresh_token } = await authService.login({
-          email: values.email,
-          password: values.password,
-        });
-
-        if (!access_token || !refresh_token) {
-          throw new Error('Invalid authentication response');
-        }
-
-        navigate('/');
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
+    onSubmit: (values) => {
+      loginMutation.mutate({
+        email: values.email,
+        password: values.password,
+      });
     },
   });
 
   return (
-    <div className="max-w-md mx-auto mt-8">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
+    <div className="mx-auto mt-8 max-w-md">
+      <h1 className="mb-4 font-bold text-2xl">Login</h1>
+
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-4">
           <label className="block mb-2">Email</label>
@@ -60,10 +62,12 @@ export function Login() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.email}
-            className="w-full p-2 border rounded"
+            className="p-2 border rounded w-full"
           />
           {formik.touched.email && formik.errors.email && (
-            <div className="text-red-600 text-sm mt-1">{formik.errors.email}</div>
+            <div className="mt-1 text-red-600 text-sm">
+              {formik.errors.email}
+            </div>
           )}
         </div>
         <div className="mb-4">
@@ -74,18 +78,20 @@ export function Login() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.password}
-            className="w-full p-2 border rounded"
+            className="p-2 border rounded w-full"
           />
           {formik.touched.password && formik.errors.password && (
-            <div className="text-red-600 text-sm mt-1">{formik.errors.password}</div>
+            <div className="mt-1 text-red-600 text-sm">
+              {formik.errors.password}
+            </div>
           )}
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
-          disabled={isLoading || !formik.isValid}
+          className="bg-blue-500 p-2 rounded w-full text-white"
+          disabled={loginMutation.isPending || !formik.isValid}
         >
-          {isLoading ? 'Loading...' : 'Login'}
+          {loginMutation.isPending ? "Loading..." : "Login"}
         </button>
       </form>
     </div>

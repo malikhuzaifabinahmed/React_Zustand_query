@@ -1,54 +1,17 @@
-import { TOKEN_COOKIE_CONFIG } from "../config";
-import { api } from "../lib/axios";
+import api from "@/lib/axios";
 import Cookies from "js-cookie";
-import { queryClient } from "../lib/queryClient";
-import useAuth from "../hooks/stores/useAuth";
-// TODO: Implement the authService object
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const refreshToken = Cookies.get("refreshToken");
-        const { access_token, refresh_token } = await authService.refreshToken(
-          refreshToken
-        );
-
-        // Update store tokens
-        const { setTokens } = useAuth.getState();
-        setTokens(access_token, refresh_token);
-
-        // Retry original request with new token
-        originalRequest.headers.Authorization = `Bearer ${access_token}`;
-        return api(originalRequest);
-      } catch (err) {
-        // If refresh fails, logout user
-        authService.logout();
-        return Promise.reject(error);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
+import { queryClient } from "@/lib/queryClient";
+import useAuth from "@/hooks/stores/useAuth";
 
 export const authService = {
   login: async (credentials) => {
-    try {
-      const response = await api.post("/auth/login", credentials);
-      const { access_token, refresh_token } = response.data;
+    const response = await api.post("/auth/login", credentials);
+    const { access_token, refresh_token } = response.data;
+    // Store tokens in store
+    const { setTokens } = useAuth.getState();
+    setTokens(access_token, refresh_token);
 
-      // Store tokens in store
-      const { setTokens } = useAuth.getState();
-      setTokens(access_token, refresh_token);
-
-      return response.data;
-    } catch (error) {
-      throw new Error("Login failed: " + error.message);
-    }
+    return response.data;
   },
 
   refreshToken: async (refreshToken) => {
