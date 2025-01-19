@@ -137,7 +137,6 @@ const { data: profile, isLoading } = useUser();
 3. **Error Handling**
 
    - Global error boundary
-   - API error interceptors
    - Form validation
    - Toast notifications
 
@@ -344,26 +343,35 @@ export const environment = {
 npm install
 ```
 
-3. Set up environment variables:
+3. Start the development server:
 
 ```bash
-REACT_APP_API_URL=your_api_url
-```
-
-4. Start the development server:
-
-```bash
-npm start
+npm run dev
 ```
 
 ## Dependencies
 
-- React Query v3
-- Zustand
-- Axios
-- React Router v6
-- js-cookie
-- react-toastify
+Core:
+
+- React v18.2.0
+- @tanstack/react-query v5.8.4
+- Zustand v4.4.6
+- Axios v1.6.2
+- React Router DOM v7.1.1
+- js-cookie v3.0.5
+- Sonner v1.7.2 (for toast notifications)
+
+Form Handling:
+
+- Formik v2.4.6
+- Yup v1.6.1
+
+Development:
+
+- Vite v5.0.0
+- ESLint v9.18.0
+- Tailwind CSS v3.3.5
+- @tailwindcss/forms v0.5.7
 
 ## Best Practices
 
@@ -382,4 +390,3 @@ npm start
 3. **API Requests**
    - Handle token expiration automatically
    - Implement request/response interceptors
-   - Proper error handling
