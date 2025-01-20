@@ -6,12 +6,12 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "baseUrl": ".",
-
     // Path Mapping
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-
     // Type Checking
     "allowJs": true,
     "checkJs": false,
@@ -22,7 +22,6 @@
     "strictBindCallApply": false,
     "strictPropertyInitialization": false,
     "noImplicitThis": false,
-
     // Additional Checks
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -31,7 +30,6 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": false,
     "noPropertyAccessFromIndexSignature": false,
-
     // Advanced Options
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -39,11 +37,14 @@
     "useUnknownInCatchVariables": false,
     "skipLibCheck": true,
     "noLib": false,
-
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
