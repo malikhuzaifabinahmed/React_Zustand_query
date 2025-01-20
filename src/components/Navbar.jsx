@@ -4,7 +4,6 @@ import { useUser } from "@/hooks/queries/useUser";
 export default function Navbar() {
   const navigate = useNavigate();
   const { data } = useUser();
-  console.log(data);
   const handleLogout = async () => {
     await authService.logout();
   };
