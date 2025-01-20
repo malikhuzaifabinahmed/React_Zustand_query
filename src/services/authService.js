@@ -5,13 +5,17 @@ import useAuth from "@/hooks/stores/useAuth";
 
 export const authService = {
   login: async (credentials) => {
-    const response = await api.post("/auth/login", credentials);
-    const { access_token, refresh_token } = response.data;
-    // Store tokens in store
-    const { setTokens } = useAuth.getState();
-    setTokens(access_token, refresh_token);
+    try {
+      const response = await api.post("/auth/login", credentials);
+      const { access_token, refresh_token } = response.data;
+      // Store tokens in store
+      const { setTokens } = useAuth.getState();
+      setTokens(access_token, refresh_token);
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      throw new Error("Login failed: " + error.message);
+    }
   },
 
   refreshToken: async (refreshToken) => {
@@ -28,11 +32,7 @@ export const authService = {
   getProfile: async () => {
     try {
       const accessToken = Cookies.get("accessToken");
-      const response = await api.get("/auth/profile", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await api.get("/auth/profile");
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch profile: " + error.message);
@@ -41,10 +41,8 @@ export const authService = {
 
   logout: async () => {
     try {
-      // Remove tokens from store
       const { clearTokens } = useAuth.getState();
       clearTokens();
-
       queryClient.clear();
     } catch (error) {
       throw new Error("Logout failed: " + error.message);
