@@ -5,17 +5,14 @@ import useAuth from "@/hooks/stores/useAuth";
 
 export const authService = {
   login: async (credentials) => {
-    try {
-      const response = await api.post("/auth/login", credentials);
-      const { access_token, refresh_token } = response.data;
-      // Store tokens in store
-      const { setTokens } = useAuth.getState();
-      setTokens(access_token, refresh_token);
+    const response = await api.post("/auth/login", credentials);
+    const { access_token, refresh_token } = response.data;
+    // Store tokens in store
+    const { setTokens } = useAuth.getState();
+    setTokens(access_token, refresh_token);
 
-      return response.data;
-    } catch (error) {
-      throw new Error("Login failed: " + error.message);
-    }
+    return response.data;
+
   },
 
   refreshToken: async (refreshToken) => {

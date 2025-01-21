@@ -28,8 +28,9 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const hadAuthHeader = originalRequest.headers?.Authorization;
 
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && !originalRequest._retry && hadAuthHeader) {
       originalRequest._retry = true;
 
       try {
