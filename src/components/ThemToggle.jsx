@@ -1,5 +1,4 @@
 import useTheme from '@/hooks/stores/useTheme';
-import { useState, useEffect } from 'react';
 import { FiSun, FiMoon, FiMonitor } from 'react-icons/fi';
 
 const ThemeToggle = () => {
