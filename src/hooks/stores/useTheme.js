@@ -6,13 +6,13 @@ const darkModeMediaQuery = typeof window !== 'undefined' && window.matchMedia
     ? window.matchMedia("(prefers-color-scheme: dark)")
     : null;
 
-const applyThemeClass = (theme) => {
+const applyThemeClass = (theme, isDarkPreference = darkModeMediaQuery?.matches) => {
     if (theme === "dark") {
         document.documentElement.classList.add("dark");
     } else if (theme === "light") {
         document.documentElement.classList.remove("dark");
     } else if (theme === "system") {
-        if (darkModeMediaQuery?.matches) {
+        if (isDarkPreference) {
             document.documentElement.classList.add("dark");
         } else {
             document.documentElement.classList.remove("dark");
@@ -22,7 +22,7 @@ const applyThemeClass = (theme) => {
 
 const useTheme = create(
     persist(
-        (set) => ({
+        (set, get) => ({
             theme: 'system',
             setTheme: (theme) => {
                 applyThemeClass(theme);
@@ -40,5 +40,15 @@ const useTheme = create(
         }
     )
 );
+
+// Listen for system theme changes and update if theme is set to 'system'
+if (darkModeMediaQuery) {
+    darkModeMediaQuery.addEventListener('change', (e) => {
+        const currentTheme = useTheme.getState().theme;
+        if (currentTheme === 'system') {
+            applyThemeClass('system', e.matches);
+        }
+    });
+}
 
 export default useTheme;
