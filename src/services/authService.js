@@ -1,5 +1,4 @@
 import api from "@/lib/axios";
-import Cookies from "js-cookie";
 import { queryClient } from "@/lib/queryClient";
 import useAuth from "@/hooks/stores/useAuth";
 
@@ -28,7 +27,6 @@ export const authService = {
 
   getProfile: async () => {
     try {
-      const accessToken = Cookies.get("accessToken");
       const response = await api.get("/auth/profile");
       return response.data;
     } catch (error) {

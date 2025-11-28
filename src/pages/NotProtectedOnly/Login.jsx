@@ -5,6 +5,15 @@ import * as Yup from "yup";
 import { toast } from "sonner";
 import { useLogin } from "@/hooks/mutations/auth";
 
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
+
 export function Login() {
   const navigate = useNavigate();
 
@@ -24,15 +33,6 @@ export function Login() {
       toast.error(error.message || "Login failed. Please try again.");
     },
 
-  });
-
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
   });
 
   const formik = useFormik({

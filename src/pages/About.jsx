@@ -1,29 +1,29 @@
-export const About = () => {
-  const teamMembers = [
-    {
-      name: "John Doe",
-      role: "CEO & Founder",
-      bio: "Leading innovation since 2020",
-    },
-    {
-      name: "Jane Smith",
-      role: "CTO",
-      bio: "Technical expert with 15 years experience",
-    },
-    {
-      name: "Mike Johnson",
-      role: "Head of Design",
-      bio: "Creating beautiful experiences",
-    },
-  ]
+const teamMembers = [
+  {
+    name: "John Doe",
+    role: "CEO & Founder",
+    bio: "Leading innovation since 2020",
+  },
+  {
+    name: "Jane Smith",
+    role: "CTO",
+    bio: "Technical expert with 15 years experience",
+  },
+  {
+    name: "Mike Johnson",
+    role: "Head of Design",
+    bio: "Creating beautiful experiences",
+  },
+]
 
+export const About = () => {
   return (
     <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
       {/* Hero Section */}
       <section className="mb-16 text-center">
         <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">About Us</h1>
         <p className="mx-auto max-w-2xl text-xl text-gray-500 sm:text-2xl">
-          We're on a mission to transform the digital landscape through innovative solutions and cutting-edge
+          We&apos;re on a mission to transform the digital landscape through innovative solutions and cutting-edge
           technology.
         </p>
       </section>

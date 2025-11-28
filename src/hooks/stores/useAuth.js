@@ -8,7 +8,7 @@ const useAuth = create((set) => ({
   isAuthenticated: !!Cookies.get("accessToken"),
 
   setTokens: (accessToken, refreshToken) => {
-    Cookies.set("accessToken", accessToken), TOKEN_COOKIE_CONFIG;
+    Cookies.set("accessToken", accessToken, TOKEN_COOKIE_CONFIG);
     Cookies.set("refreshToken", refreshToken, TOKEN_COOKIE_CONFIG);
     set({
       accessToken,
